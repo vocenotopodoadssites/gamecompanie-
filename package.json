@@ -1,0 +1,14 @@
+{
+  "name": "magnata-tycoon",
+  "version": "1.0.0",
+  "description": "Game Tycoon Online multiplayer massivo baseado em navegador",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}

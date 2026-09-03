@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magnata Tycoon Online - MMO Econômico P2P & IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- HEADER & TICKER -->
+  <header class="app-header">
+    <div class="brand-zone">
+      <div class="logo-icon">🚀</div>
+      <div>
+        <h1 class="brand-title">MAGNATA <span>TYCOON</span></h1>
+        <p class="brand-subtitle">MMO Econômico P2P • Motor de Inovação por IA</p>
+      </div>
+    </div>
+
+    <!-- Live Macroeconomic Event Ribbon -->
+    <div class="macro-event-banner" id="macroEventBanner">
+      <span class="event-tag">EVENTO MACRO</span>
+      <span class="event-title" id="eventTitle">Carregando mercados globais...</span>
+      <span class="event-timer" id="eventTimer">60s</span>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="user-quick-stats">
+      <div class="stat-pill cash-pill">
+        <span class="stat-label">SALDO DISPONÍVEL</span>
+        <span class="stat-val" id="playerCash">$0,00</span>
+      </div>
+      <div class="stat-pill networth-pill">
+        <span class="stat-label">PATRIMÔNIO LÍQUIDO</span>
+        <span class="stat-val" id="playerNetWorth">$0,00</span>
+      </div>
+      <div class="stat-pill era-pill" id="eraPill">
+        <span class="stat-label">ERA ATUAL</span>
+        <span class="stat-val" id="playerEraBadge">🌾 Fazenda</span>
+      </div>
+      <button class="sound-toggle-btn" id="soundToggle" title="Alternar Efeitos Sonoros">🔊</button>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="main-nav">
+    <button class="nav-btn active" data-tab="tab-overview">📊 Visão Geral</button>
+    <button class="nav-btn" data-tab="tab-factory">🏭 Fábrica & Grid</button>
+    <button class="nav-btn highlight" data-tab="tab-lab">🔬 P&D com IA</button>
+    <button class="nav-btn" data-tab="tab-market">📈 Livro de Ofertas P2P</button>
+    <button class="nav-btn" data-tab="tab-contracts">💬 Chat & Contratos</button>
+    <button class="nav-btn" data-tab="tab-logistics">🚚 Logística & Estoque</button>
+    <button class="nav-btn" data-tab="tab-ranking">🏆 Ranking Global</button>
+  </nav>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="main-container">
+
+    <!-- 1. TAB: VISÃO GERAL & PROGRESSÃO DE ERAS -->
+    <section id="tab-overview" class="tab-pane active">
+      <div class="grid-dashboard">
+        <!-- Era Progression Timeline -->
+        <div class="card timeline-card">
+          <div class="card-header">
+            <h2>🌍 Progressão Tecnológica de Eras</h2>
+            <span class="badge" id="currentEraStep">Estágio 1 de 5</span>
+          </div>
+          <div class="eras-stepper" id="erasStepper">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="era-advance-action">
+            <div class="advance-info">
+              <h3 id="nextEraTitle">Próxima Era: Agroindústria Local</h3>
+              <p id="nextEraRequirement">Requer Patrimônio Líquido de $50.000</p>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="eraProgressFill" style="width: 0%"></div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-advance" id="btnAdvanceEra">Evoluir para Próxima Era 🚀</button>
+          </div>
+        </div>
+
+        <!-- Corporate Overview KPI Cards -->
+        <div class="overview-metrics-grid">
+          <div class="card metric-card">
+            <span class="metric-icon">⚡</span>
+            <div class="metric-data">
+              <span class="metric-title">Matriz Energética</span>
+              <span class="metric-number" id="kpiPower">2 / 20 MW</span>
+              <div class="metric-sub">Capacidade da Rede</div>
+            </div>
+          </div>
+          <div class="card metric-card">
+            <span class="metric-icon">📦</span>
+            <div class="metric-data">
+              <span class="metric-title">Armazém Logístico</span>
+              <span class="metric-number" id="kpiWarehouse">180 / 2.500 m³</span>
+              <div class="metric-sub">Espaço em uso</div>
+            </div>
+          </div>
+          <div class="card metric-card">
+            <span class="metric-icon">🚜</span>
+            <div class="metric-data">
+              <span class="metric-title">Frota Ativa</span>
+              <span class="metric-number" id="kpiFleet">3 Veículos</span>
+              <div class="metric-sub">Capacidade de Entrega</div>
+            </div>
+          </div>
+          <div class="card metric-card">
+            <span class="metric-icon">📜</span>
+            <div class="metric-data">
+              <span class="metric-title">Patentes por IA</span>
+              <span class="metric-number" id="kpiPatents">0 Registradas</span>
+              <div class="metric-sub">Inovações Exclusivas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corporate Quick Inventory -->
+        <div class="card full-width">
+          <div class="card-header">
+            <h3>📋 Inventário de Produtos & Matérias-Primas</h3>
+            <span class="text-muted">Cotações atualizadas em tempo real pelo mercado P2P</span>
+          </div>
+          <div class="inventory-tags-container" id="overviewInventoryGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. TAB: FÁBRICA & GRID DE PRODUÇÃO -->
+    <section id="tab-factory" class="tab-pane">
+      <div class="factory-header-bar">
+        <div>
+          <h2>🏭 Grid Industrial de Produção</h2>
+          <p class="text-muted">Instale e aprimore maquinários para automação contínua de insumos agrícolas e espaciais.</p>
+        </div>
+        <div class="factory-status-badges">
+          <span class="status-chip energy-chip" id="factoryPowerChip">⚡ Demanda: 2 MW</span>
+          <span class="status-chip throughput-chip">⚙️ Throughput: Ativo</span>
+        </div>
+      </div>
+
+      <div class="factory-grid-container" id="factoryPlotsGrid">
+        <!-- 8 Plots rendered by JS -->
+      </div>
+    </section>
+
+    <!-- 3. TAB: P&D COM IA DINÂMICA -->
+    <section id="tab-lab" class="tab-pane">
+      <div class="lab-container">
+        <div class="lab-workbench-card card">
+          <div class="card-header">
+            <h2>🔬 Bancada de Criação Livre com Inteligência Artificial</h2>
+            <span class="badge ai-badge">✨ Motor Neural Conectado</span>
+          </div>
+          <p class="lab-instruction">
+            Combine quaisquer 2 matérias-primas, peças mecânicas ou catalisadores da sua empresa. 
+            O modelo de IA sintetizará um <strong>novo produto manufaturado ou maquinário híbrido</strong> em tempo real com atributos únicos, cálculo de eficiência energética, lore industrial e registro de patente!
+          </p>
+
+          <div class="workbench-slots">
+            <!-- Slot 1 -->
+            <div class="slot-box" id="slotInput1">
+              <span class="slot-title">Insumo Base A</span>
+              <select class="input-select" id="selectInput1">
+                <!-- Populated by JS -->
+              </select>
+              <div class="slot-preview" id="previewInput1">🌾 Selecione o insumo</div>
+            </div>
+
+            <div class="fusion-symbol">➕</div>
+
+            <!-- Slot 2 -->
+            <div class="slot-box" id="slotInput2">
+              <span class="slot-title">Componente B</span>
+              <select class="input-select" id="selectInput2">
+                <!-- Populated by JS -->
+              </select>
+              <div class="slot-preview" id="previewInput2">🪵 Selecione o insumo</div>
+            </div>
+
+            <div class="fusion-symbol">⚡</div>
+
+            <!-- Slot Catalyst -->
+            <div class="slot-box" id="slotCatalyst">
+              <span class="slot-title">Catalisador de Síntese</span>
+              <select class="input-select" id="selectCatalyst">
+                <option value="Padronizado">Processo Convencional</option>
+                <option value="Laser Térmico">Laser Térmico Sub-atômico</option>
+                <option value="Bio-Aditivo">Bio-Aditivo Enzimático</option>
+                <option value="Vácuo Quântico">Contenção de Vácuo Quântico</option>
+              </select>
+              <div class="slot-preview" id="previewCatalyst">🧪 Processo Convencional</div>
+            </div>
+          </div>
+
+          <div class="lab-action-row">
+            <div class="research-cost">
+              <span>Custo de Prototipagem: <strong>$3.500,00</strong></span>
+            </div>
+            <button class="btn btn-ai-sparkle" id="btnSynthesizeAI">
+              <span class="sparkle-icon">✨</span> Sintetizar Inovação com IA
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Hologram Blueprint Card -->
+        <div class="blueprint-card card" id="blueprintResultCard">
+          <div class="card-header">
+            <h3>📑 Holograma da Última Patente Registrada</h3>
+            <span class="blueprint-tag" id="bpCategory">AGUARDANDO SÍNTESE</span>
+          </div>
+          <div class="blueprint-content" id="blueprintBody">
+            <div class="blueprint-placeholder">
+              <div class="pulse-ring"></div>
+              <span>Selecione insumos na bancada acima e clique em "Sintetizar com IA"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player Patents Library -->
+      <div class="card patents-history-card">
+        <div class="card-header">
+          <h3>🏛️ Portfólio de Patentes Registradas da Sua Corporação</h3>
+          <span class="badge" id="patentsCountBadge">0 Patentes</span>
+        </div>
+        <div class="patents-grid" id="playerPatentsList">
+          <p class="text-muted empty-state">Nenhuma patente criada ainda. Use a bancada de P&D para inventar sua primeira tecnologia!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. TAB: LIVRO DE OFERTAS P2P (ORDER BOOK) -->
+    <section id="tab-market" class="tab-pane">
+      <div class="market-layout">
+        <!-- Market Left: Commodities Selector & Price Chart -->
+        <div class="market-chart-col card">
+          <div class="market-toolbar">
+            <div class="select-commodity-group">
+              <label for="marketItemSelect">Mercadoria:</label>
+              <select id="marketItemSelect" class="input-select">
+                <!-- Populated by JS -->
+              </select>
+            </div>
+            <div class="current-price-display">
+              <span class="price-val" id="marketCurPrice">$0,00</span>
+              <span class="price-change positive" id="marketCurChange">+0.0%</span>
+            </div>
+          </div>
+
+          <!-- Canvas Trend Chart -->
+          <div class="chart-wrapper">
+            <canvas id="marketCanvasChart" width="600" height="220"></canvas>
+          </div>
+
+          <!-- Order Creation Panel -->
+          <div class="order-entry-panel">
+            <div class="order-tabs">
+              <button class="order-side-btn buy active" id="btnSideBuy">COMPRAR</button>
+              <button class="order-side-btn sell" id="btnSideSell">VENDER</button>
+            </div>
+            <div class="order-form">
+              <div class="form-row">
+                <label>Preço Unitário ($):</label>
+                <input type="number" id="orderInputPrice" class="input-text" step="0.1" min="0.1">
+              </div>
+              <div class="form-row">
+                <label>Quantidade:</label>
+                <input type="number" id="orderInputQty" class="input-text" step="1" min="1" value="10">
+              </div>
+              <div class="form-row order-summary-row">
+                <span>Total Estimado:</span>
+                <strong id="orderTotalEstimado">$0,00</strong>
+              </div>
+              <button class="btn btn-buy btn-block" id="btnSubmitOrder">Emitir Ordem no Livro P2P</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Market Right: Real-time Order Book & Trade Depth -->
+        <div class="orderbook-col card">
+          <div class="card-header">
+            <h3>📖 Livro de Ofertas P2P</h3>
+            <span class="badge live-badge">AO VIVO</span>
+          </div>
+
+          <!-- Asks (Venda - Vermelho) -->
+          <div class="ob-section asks-section">
+            <div class="ob-header-row">
+              <span>PREÇO ($)</span>
+              <span>QUANTIDADE</span>
+              <span>VENDEDOR</span>
+            </div>
+            <div class="ob-rows" id="obAsksList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Spread Indicator -->
+          <div class="ob-spread-bar" id="obSpreadBar">
+            <span>SPREAD: $0,00</span>
+          </div>
+
+          <!-- Bids (Compra - Verde) -->
+          <div class="ob-section bids-section">
+            <div class="ob-rows" id="obBidsList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Recent Trades Stream -->
+          <div class="ob-history-section">
+            <div class="card-header mini-header">
+              <h4>Últimas Transações Fechadas</h4>
+            </div>
+            <div class="trade-history-list" id="obHistoryList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. TAB: CHAT P2P & CONTRATOS DIRETOS -->
+    <section id="tab-contracts" class="tab-pane">
+      <div class="p2p-contracts-grid">
+        <!-- Live Trade Chat -->
+        <div class="card chat-card">
+          <div class="card-header">
+            <h3>💬 Canal Global de Negociação P2P</h3>
+            <span class="badge online-badge" id="onlineUsersCount">48 Magnatas Online</span>
+          </div>
+          <div class="chat-feed" id="chatFeed">
+            <!-- Messages rendered by JS -->
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInputText" class="input-text" placeholder="Escreva uma oferta comercial ou mensagem..." maxlength="180">
+            <button class="btn btn-primary" id="btnSendChat">Enviar</button>
+          </div>
+        </div>
+
+        <!-- Direct Commercial Contracts -->
+        <div class="card contracts-card">
+          <div class="card-header">
+            <h3>📜 Balcão de Contratos Comerciais</h3>
+            <button class="btn btn-sm btn-outline" id="btnOpenNewContractModal">+ Novo Contrato</button>
+          </div>
+          <div class="contracts-list" id="contractsList">
+            <!-- Contracts rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TAB: LOGÍSTICA & ARMAZÉM -->
+    <section id="tab-logistics" class="tab-pane">
+      <div class="logistics-grid">
+        <!-- Warehouse Capacity -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📦 Silos e Armazenagem Geral</h3>
+            <span class="badge" id="warehouseCapText">180 / 2.500 m³</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="warehouseFillBar" style="width: 7%"></div>
+          </div>
+          <div class="warehouse-items-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mercadoria</th>
+                  <th>Quantidade</th>
+                  <th>Cotação Média</th>
+                  <th>Valor Total</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="warehouseTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Fleet Vehicles -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🚚 Frota de Transporte & Logística</h3>
+            <span class="text-muted">Transporte de produtos entre cidades, polos e bases orbitais</span>
+          </div>
+          <div class="fleet-cards-grid" id="fleetCardsGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. TAB: RANKING GLOBAL & MACROECONOMIA -->
+    <section id="tab-ranking" class="tab-pane">
+      <div class="ranking-layout">
+        <!-- Leaderboard -->
+        <div class="card full-width">
+          <div class="card-header">
+            <h3>🏆 Ranking dos Maiores Magnatas Globais</h3>
+            <span class="badge">TEMPORADA 1</span>
+          </div>
+          <table class="data-table leaderboard-table">
+            <thead>
+              <tr>
+                <th>Posição</th>
+                <th>Corporação</th>
+                <th>Era Tecnológica</th>
+                <th>Rating de Crédito</th>
+                <th>Patrimônio Líquido</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: INSTALAR MÁQUINA NO LOTE -->
+  <div class="modal-overlay" id="modalInstallMachine">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalPlotTitle">Instalar Equipamento no Lote</h3>
+        <button class="modal-close-btn" id="btnCloseInstallModal">✖</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">Escolha um maquinário disponível para este lote industrial:</p>
+        <div class="machine-select-list" id="modalMachineList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVO CONTRATO P2P -->
+  <div class="modal-overlay" id="modalNewContract">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Emitir Proposta de Contrato P2P</h3>
+        <button class="modal-close-btn" id="btnCloseContractModal">✖</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label>Destinatário / Empresa:</label>
+          <input type="text" id="contractToInput" class="input-text" value="Mercado Aberto">
+        </div>
+        <div class="form-row">
+          <label>Mercadoria Fornecida:</label>
+          <select id="contractItemSelect" class="input-select">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Quantidade:</label>
+          <input type="number" id="contractAmountInput" class="input-text" min="1" value="50">
+        </div>
+        <div class="form-row">
+          <label>Preço por Unidade ($):</label>
+          <input type="number" id="contractPriceInput" class="input-text" min="1" step="0.5" value="25">
+        </div>
+        <button class="btn btn-primary btn-block" id="btnSubmitNewContract">Publicar Contrato Comercial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

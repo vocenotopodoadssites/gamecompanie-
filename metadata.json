@@ -1,0 +1,7 @@
+{
+  "name": "Magnata Tycoon",
+  "description": "Game Tycoon Online com economia P2P, progressão da fazenda ao espaço e criação dinâmica de produtos e maquinários por IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
